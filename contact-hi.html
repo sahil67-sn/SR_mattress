@@ -107,6 +107,16 @@
                         </select>
                     </div>
                 </div>
+                <div class="row2">
+                    <div class="field" id="sz-wrap" hidden>
+                        <label for="sz">साइज़ / पैक</label>
+                        <select id="sz" name="Size"></select>
+                    </div>
+                    <div class="field">
+                        <label for="q">मात्रा</label>
+                        <input id="q" name="Quantity" type="number" min="1" placeholder="जैसे 1, 10, 50">
+                    </div>
+                </div>
                 <div class="field">
                     <label for="m">संदेश</label>
                     <textarea id="m" name="Message" placeholder="साइज़, मात्रा, डिलीवरी का शहर..."></textarea>
@@ -198,6 +208,8 @@
                 "मैं हूँ: " + v("t"),
                 "प्रोडक्ट: " + v("pr")
             ];
+            if (v("sz")) lines.push("साइज़: " + v("sz"));
+            if (v("q")) lines.push("मात्रा: " + v("q"));
             if (v("m")) lines.push("संदेश: " + v("m"));
             var url = "https://wa.me/918852099018?text=" + encodeURIComponent(lines.join("\n"));
             var w = window.open(url, "_blank", "noopener");
@@ -205,5 +217,6 @@
         });
     })();
     </script>
+    <script type="module" src="contact-live.js"></script>
 </body>
 </html>

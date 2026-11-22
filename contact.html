@@ -106,6 +106,16 @@
                         </select>
                     </div>
                 </div>
+                <div class="row2">
+                    <div class="field" id="sz-wrap" hidden>
+                        <label for="sz">Size / Pack</label>
+                        <select id="sz" name="Size"></select>
+                    </div>
+                    <div class="field">
+                        <label for="q">Quantity</label>
+                        <input id="q" name="Quantity" type="number" min="1" placeholder="e.g. 1, 10, 50">
+                    </div>
+                </div>
                 <div class="field">
                     <label for="m">Message</label>
                     <textarea id="m" name="Message" placeholder="Size, quantity, delivery city..."></textarea>
@@ -197,6 +207,8 @@
                 "I am a: " + v("t"),
                 "Product: " + v("pr")
             ];
+            if (v("sz")) lines.push("Size: " + v("sz"));
+            if (v("q")) lines.push("Quantity: " + v("q"));
             if (v("m")) lines.push("Message: " + v("m"));
             var url = "https://wa.me/919610594105?text=" + encodeURIComponent(lines.join("\n"));
             var w = window.open(url, "_blank", "noopener");
@@ -204,5 +216,6 @@
         });
     })();
     </script>
+    <script type="module" src="contact-live.js"></script>
 </body>
 </html>
