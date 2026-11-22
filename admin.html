@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin | SR Mattress</title>
+    <link rel="icon" href="assets/img/logo-light.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin">
+    <header class="site-header">
+        <div class="wrap nav">
+            <a class="brand" href="index.html" aria-label="SR Mattress home">
+                <img alt="SR Mattress" src="assets/img/logo-light.png">
+            </a>
+            <div id="who" class="who" hidden>
+                <span id="who-email"></span>
+                <button id="logout" class="btn btn-navy sm" type="button">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <div id="notice" class="notice" hidden></div>
+
+        <!-- LOGIN -->
+        <section id="login-box" class="card login" hidden>
+            <h1>Admin Login</h1>
+            <p class="muted">Sirf SR Mattress ke admin ke liye.</p>
+            <form id="login-form">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" autocomplete="username" required>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" autocomplete="current-password" required>
+                </div>
+                <button class="btn btn-gold" type="submit">Login</button>
+            </form>
+        </section>
+
+        <!-- DASHBOARD -->
+        <section id="dash" hidden>
+            <div class="dash-head">
+                <div>
+                    <h1>Products</h1>
+                    <p class="muted">Yahan jo badlenge, wo turant website pe dikhega.</p>
+                </div>
+                <div class="dash-actions">
+                    <button id="add" class="btn btn-gold sm" type="button">+ Naya Product</button>
+                    <button id="seed" class="btn btn-navy sm" type="button" hidden>Purane Products Import Karein</button>
+                </div>
+            </div>
+            <div id="list"></div>
+        </section>
+    </main>
+
+    <datalist id="images">
+        <option value="assets/img/navy-mattress.jpg">
+        <option value="assets/img/brown-mattress.jpg">
+        <option value="assets/img/pillow.jpg">
+        <option value="assets/img/white_Mattress.jpg">
+        <option value="assets/img/grey_mattress.jpg">
+    </datalist>
+
+    <script type="module" src="admin.js"></script>
+</body>
+</html>
