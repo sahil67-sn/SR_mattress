@@ -6,7 +6,7 @@ import { firebaseConfig } from "./firebase-config.js";
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-/* ---- Purane (abhi website pe likhe) products - "Import" button se database mein jaate hain ---- */
+/* ---- Existing products (currently written on the website) - the "Import" button copies them into the database ---- */
 const SEED = [
     {
         id: "royal-navy-pillow-top", order: 1, visible: true, inStock: true,
@@ -69,7 +69,7 @@ function say(msg, err = false) {
 }
 
 if (String(firebaseConfig.apiKey).startsWith("PASTE")) {
-    say("Firebase abhi set nahi hai. firebase-config.js mein apni keys paste karein (SETUP-GUIDE.md dekhein).", true);
+    say("Firebase is not set up yet. Paste your keys into firebase-config.js (see SETUP-GUIDE.md).", true);
     throw new Error("Firebase config missing");
 }
 
@@ -88,9 +88,9 @@ $("#login-form").addEventListener("submit", async e => {
         $("#password").value = "";
     } catch (err) {
         const bad = ["auth/invalid-credential", "auth/wrong-password", "auth/user-not-found", "auth/invalid-email"];
-        say(bad.includes(err.code) ? "Email ya password galat hai." :
-            err.code === "auth/too-many-requests" ? "Bahut baar galat try kiya, thodi der baad dobara koshish karein." :
-            "Login nahi hua: " + err.code, true);
+        say(bad.includes(err.code) ? "Incorrect email or password." :
+            err.code === "auth/too-many-requests" ? "Too many failed attempts. Please try again after some time." :
+            "Login failed: " + err.code, true);
     }
     btn.disabled = false;
 });
@@ -111,11 +111,11 @@ async function load() {
         const snap = await getDocs(query(collection(db, "products"), orderBy("order")));
         items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     } catch (err) {
-        say("Products load nahi hue: " + err.code, true);
+        say("Could not load products: " + err.code, true);
         return;
     }
     $("#seed").hidden = items.length > 0;
-    list.innerHTML = items.length ? "" : '<p class="muted">Abhi koi product nahi hai. "Purane Products Import Karein" dabayein ya naya product jodein.</p>';
+    list.innerHTML = items.length ? "" : '<p class="muted">No products yet. Click "Import Old Products" or add a new product.</p>';
     items.forEach(p => list.appendChild(formEl(p.id, p, false)));
 }
 
@@ -125,8 +125,8 @@ function sizeRow(s = {}) {
     d.innerHTML = `
         <div class="field"><label>Size / Pack (English)</label><input data-s="label" value="${esc(s.label)}" placeholder="Single (72x36)"></div>
         <div class="field"><label>Size / Pack (Hindi)</label><input data-s="labelHi" value="${esc(s.labelHi)}" placeholder="सिंगल (72x36)"></div>
-        <div class="field"><label>Daam (₹)</label><input data-s="price" type="number" min="0" step="1" value="${esc(s.price)}"></div>
-        <div class="rmwrap"><button type="button" class="rm">Hatayein</button></div>`;
+        <div class="field"><label>Price (₹)</label><input data-s="price" type="number" min="0" step="1" value="${esc(s.price)}"></div>
+        <div class="rmwrap"><button type="button" class="rm">Remove</button></div>`;
     d.querySelector(".rm").addEventListener("click", () => d.remove());
     return d;
 }
@@ -144,36 +144,36 @@ function formEl(id, p, isNew) {
     d.innerHTML = `
         <summary>
             <img src="${esc(p.image || "")}" alt="">
-            <span class="t">${esc(p.name || "Naya Product")}<small>${esc(p.nameHi || "")}</small></span>
+            <span class="t">${esc(p.name || "New Product")}<small>${esc(p.nameHi || "")}</small></span>
             <span class="pill ${inStock ? "" : "off"}">${inStock ? "In Stock" : "Out of Stock"}</span>
         </summary>
         <div class="pform">
             <div class="checks2">
-                <label><input type="checkbox" data-f="inStock" ${inStock ? "checked" : ""}> Stock mein hai</label>
-                <label><input type="checkbox" data-f="visible" ${visible ? "checked" : ""}> Website pe dikhayein</label>
+                <label><input type="checkbox" data-f="inStock" ${inStock ? "checked" : ""}> In stock</label>
+                <label><input type="checkbox" data-f="visible" ${visible ? "checked" : ""}> Show on website</label>
             </div>
             <div class="grid2">
-                ${f("Naam (English)", "name", p.name)}
-                ${f("Naam (Hindi)", "nameHi", p.nameHi)}
+                ${f("Name (English)", "name", p.name)}
+                ${f("Name (Hindi)", "nameHi", p.nameHi)}
                 ${f("Badge (English)", "badge", p.badge, { ph: "Best Seller" })}
                 ${f("Badge (Hindi)", "badgeHi", p.badgeHi, { ph: "बेस्ट सेलर" })}
-                ${f("Choti line (English)", "sub", p.sub)}
-                ${f("Choti line (Hindi)", "subHi", p.subHi)}
+                ${f("Short line (English)", "sub", p.sub)}
+                ${f("Short line (Hindi)", "subHi", p.subHi)}
                 ${f("Specs (English)", "spec", p.spec, { ph: "8 inch · Strong edge" })}
                 ${f("Specs (Hindi)", "specHi", p.specHi)}
                 ${f("Photo (assets/img/...)", "image", p.image, { list: "images" })}
-                ${f("Number (order mein kaunsa)", "order", p.order ?? items.length + 1, { type: "number", min: 1 })}
+                ${f("Display order (1 = first)", "order", p.order ?? items.length + 1, { type: "number", min: 1 })}
                 ${f("Table header (English)", "sizeHead", p.sizeHead ?? "Size (inches)")}
                 ${f("Table header (Hindi)", "sizeHeadHi", p.sizeHeadHi ?? "साइज़ (इंच)")}
             </div>
 
-            <h3>Sizes aur Daam</h3>
+            <h3>Sizes and Prices</h3>
             <div class="sizes"></div>
-            <button type="button" class="btn btn-navy sm add-size">+ Size jodein</button>
+            <button type="button" class="btn btn-navy sm add-size">+ Add size</button>
 
             <h3>Wholesale</h3>
             <div class="grid2">
-                ${f("Wholesale daam (₹, 0 = na dikhayein)", "wholesalePrice", p.wholesalePrice ?? 0, { type: "number", min: 0 })}
+                ${f("Wholesale price (₹, 0 = hide)", "wholesalePrice", p.wholesalePrice ?? 0, { type: "number", min: 0 })}
                 ${f("Minimum quantity (pcs)", "moq", p.moq ?? 10, { type: "number", min: 1 })}
                 ${f("Unit (English)", "unit", p.unit ?? "mattress", { ph: "mattress" })}
                 ${f("Unit (Hindi)", "unitHi", p.unitHi ?? "गद्दा", { ph: "गद्दा" })}
@@ -181,7 +181,7 @@ function formEl(id, p, isNew) {
 
             <div class="pactions">
                 <button type="button" class="btn btn-gold save">Save</button>
-                ${isNew ? "" : '<button type="button" class="btn btn-red del">Product Hatayein</button>'}
+                ${isNew ? "" : '<button type="button" class="btn btn-red del">Delete Product</button>'}
             </div>
         </div>`;
 
@@ -191,25 +191,25 @@ function formEl(id, p, isNew) {
 
     d.querySelector(".save").addEventListener("click", async e => {
         const data = collect(d);
-        if (!data.name) return say("Naam (English) zaroori hai.", true);
-        if (!data.sizes.length) return say("Kam se kam ek size aur daam daalein.", true);
+        if (!data.name) return say("Name (English) is required.", true);
+        if (!data.sizes.length) return say("Add at least one size with a price.", true);
         e.target.disabled = true;
         try {
             const docId = isNew ? slug(data.name) : id;
             await setDoc(doc(db, "products", docId), data);
-            say("Save ho gaya. Website pe dikhne lagega.");
+            say("Saved. It will now show on the website.");
             await load();
         } catch (err) {
-            say("Save nahi hua: " + err.code + " (kya aap sahi admin email se login hain?)", true);
+            say("Save failed: " + err.code + " (are you logged in with the correct admin email?)", true);
             e.target.disabled = false;
         }
     });
 
     const del = d.querySelector(".del");
     if (del) del.addEventListener("click", async () => {
-        if (!confirm(`"${p.name}" hamesha ke liye hata dein?`)) return;
-        try { await deleteDoc(doc(db, "products", id)); say("Product hata diya."); await load(); }
-        catch (err) { say("Hata nahi paaya: " + err.code, true); }
+        if (!confirm(`Delete "${p.name}" permanently?`)) return;
+        try { await deleteDoc(doc(db, "products", id)); say("Product deleted."); await load(); }
+        catch (err) { say("Could not delete: " + err.code, true); }
     });
     return d;
 }
@@ -239,7 +239,7 @@ function collect(d) {
 
 const slug = s => (s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "product") + "-" + Date.now().toString(36);
 
-/* ---- Naya product / Import ---- */
+/* ---- New product / Import ---- */
 $("#add").addEventListener("click", () => {
     const el = formEl(null, {}, true);
     list.prepend(el);
@@ -247,14 +247,14 @@ $("#add").addEventListener("click", () => {
 });
 
 $("#seed").addEventListener("click", async e => {
-    if (!confirm("Website ke purane 3 products database mein daal dein?")) return;
+    if (!confirm("Import the 3 existing website products into the database?")) return;
     e.target.disabled = true;
     try {
         for (const { id, ...data } of SEED) await setDoc(doc(db, "products", id), data);
-        say("Import ho gaya. Ab aap inhe edit kar sakte hain.");
+        say("Import complete. You can now edit them.");
         await load();
     } catch (err) {
-        say("Import nahi hua: " + err.code, true);
+        say("Import failed: " + err.code, true);
         e.target.disabled = false;
     }
 });

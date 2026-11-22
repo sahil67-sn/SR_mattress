@@ -1,5 +1,5 @@
-// Products page ko Firestore se bharta hai.
-// Agar Firebase set nahi hai ya load fail ho, to page ke andar likhe purane products dikhte rehte hain.
+// Fills the products page from Firestore.
+// If Firebase is not set up or fails to load, the products written in the page stay visible.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
@@ -66,6 +66,6 @@ function card(p) {
         const items = snap.docs.map(d => d.data()).filter(p => p.visible !== false);
         if (items.length) box.innerHTML = items.map(card).join("");
     } catch (e) {
-        console.warn("Products load nahi hue, purane dikh rahe hain:", e);
+        console.warn("Products failed to load, showing the built-in ones:", e);
     }
 })();

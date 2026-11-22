@@ -1,5 +1,5 @@
-// Firebase config - SETUP-GUIDE.md ke step 3 ke hisaab se apni values yahan paste karein.
-// (Ye keys public hoti hain, asli suraksha firestore.rules se aati hai.)
+// Firebase config - paste your values here as per step 2 of SETUP-GUIDE.md.
+// (These keys are public; the real protection comes from firestore.rules.)
 export const firebaseConfig = {
     apiKey: "AIzaSyBk10tsnSdhJzF71CEPSnccvY3OlJr0Hg4",
     authDomain: "sr-mattress.firebaseapp.com",

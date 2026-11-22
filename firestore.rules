@@ -1,14 +1,14 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Products sab dekh sakte hain (website ke liye)
-    // Likh/badal/hata sirf admin ka email kar sakta hai
+    // Anyone can read products (for the website)
+    // Only the admin email can create, edit or delete
     match /products/{id} {
       allow read: if true;
       allow write: if request.auth != null
-                   && request.auth.token.email == "ADMIN_EMAIL_YAHAN_LIKHEIN@gmail.com";
+                   && request.auth.token.email == "ADMIN_EMAIL_HERE@gmail.com";
     }
-    // baaki sab band
+    // everything else is blocked
     match /{document=**} {
       allow read, write: if false;
     }
