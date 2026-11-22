@@ -1,0 +1,38 @@
+/* हिंदी (देवनागरी) पेजों के लिए अतिरिक्त स्टाइल - style.css के बाद लोड करें */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Noto+Serif+Devanagari:wght@500;700;800&display=swap');
+
+:root{
+    --head:'Playfair Display','Noto Serif Devanagari',Georgia,serif;
+    --script:'Noto Serif Devanagari','Dancing Script',serif;
+    --body:'Poppins','Noto Sans Devanagari',system-ui,sans-serif;
+}
+
+/* देवनागरी में ज़्यादा letter-spacing और uppercase से मात्राएँ टूटती हैं */
+.golden,.tags span,.badge,.pbody .hint,.ptable th,.tier .qty,.tier .ribbon,
+.foot h4,.info-item b,.story-block span,.field label,.crumbs{
+    letter-spacing:normal;
+    text-transform:none;
+}
+.story-block h2,.story-block h2 em{
+    letter-spacing:normal;
+}
+
+/* मात्राओं के लिए थोड़ी ज़्यादा line-height */
+h1,h2,h3{ line-height:1.35; }
+.hero h1{ line-height:1.3; }
+.story-block h2{ line-height:1.3; }
+.seal{ line-height:1.4; }
+
+/* Dancing Script देवनागरी सपोर्ट नहीं करता - इसलिए serif इस्तेमाल */
+.script,.hero h1 em,.script-line,.photo-frame figcaption{
+    font-family:var(--script);
+    font-weight:700;
+}
+.script-line{ font-size:1.25rem; }
+.photo-frame figcaption{ font-size:1.15rem; }
+
+/* भाषा बदलने वाला लिंक */
+.menu a.lang{
+    border:1.5px solid var(--gold);
+    padding:7px 14px;
+}
