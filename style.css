@@ -1616,3 +1616,186 @@ a:focus-visible,summary:focus-visible,button:focus-visible,.burger:focus-visible
     background:#b42318;
     color:#fff;
 }
+
+
+/* ===== HOME PAGE POLISH: PRODUCT SLIDER + STICKY QUALITY STORY ===== */
+.slider{
+    max-width:960px;
+    height:clamp(340px,48vw,520px);
+    overflow:hidden;
+    border:1px solid rgba(201,153,58,.28);
+    box-shadow:0 22px 55px -28px rgba(8,24,52,.55);
+    background:var(--navy-ink);
+}
+.slide{isolation:isolate;}
+.slide img{
+    object-fit:cover;
+    object-position:center;
+    transition:transform 7s ease;
+}
+.slide::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background:linear-gradient(90deg,rgba(8,24,52,.88) 0%,rgba(8,24,52,.48) 48%,rgba(8,24,52,.04) 100%),linear-gradient(0deg,rgba(8,24,52,.45),transparent 55%);
+    pointer-events:none;
+}
+.slide-caption{
+    position:absolute;
+    z-index:2;
+    left:clamp(24px,6vw,68px);
+    bottom:clamp(36px,7vw,76px);
+    max-width:min(520px,75%);
+    color:#fff;
+    pointer-events:none;
+}
+.slide-caption span{
+    display:inline-block;
+    color:var(--gold-soft);
+    font-size:.72rem;
+    font-weight:600;
+    letter-spacing:.2em;
+    margin-bottom:14px;
+}
+.slide-caption h3{
+    color:#fff;
+    font-family:var(--head);
+    font-size:clamp(1.8rem,4.4vw,3.4rem);
+    line-height:1.08;
+    margin-bottom:12px;
+    text-shadow:0 3px 18px rgba(0,0,0,.2);
+}
+.slide-caption p{color:#e4e9f3;font-size:clamp(.85rem,1.5vw,1rem);}
+.left,.right{
+    z-index:4;
+    width:44px;height:44px;padding:0;
+    display:grid;place-items:center;
+    border:1px solid rgba(255,255,255,.55);
+    background:rgba(8,24,52,.58);
+    backdrop-filter:blur(8px);
+    font-size:1rem;
+    transition:background .25s,transform .25s;
+}
+.left:hover,.right:hover{background:var(--gold);color:var(--navy-ink);}
+.slider-dots{
+    position:absolute;z-index:5;bottom:18px;left:50%;
+    transform:translateX(-50%);display:flex;gap:9px;
+}
+.slider-dots label{
+    display:block;width:8px;height:8px;border-radius:99px;
+    background:rgba(255,255,255,.55);cursor:pointer;
+    transition:width .25s,background .25s;
+}
+#s1:checked ~ .slider-dots label[for="s1"],
+#s2:checked ~ .slider-dots label[for="s2"],
+#s3:checked ~ .slider-dots label[for="s3"],
+#s4:checked ~ .slider-dots label[for="s4"],
+#s5:checked ~ .slider-dots label[for="s5"],
+#s6:checked ~ .slider-dots label[for="s6"]{
+    width:26px;background:var(--gold-soft);
+}
+.slide:has(img){animation:slideFade .45s ease both;}
+@keyframes slideFade{from{opacity:.55}to{opacity:1}}
+
+/* Sticky image remains as the backdrop; story items now sit in a clean grid. */
+.view-section{
+    position:relative;
+    height:auto;
+    min-height:0;
+    view-timeline-name:--vs;
+    view-timeline-axis:block;
+    isolation:isolate;
+}
+.image-section{
+    position:sticky;
+    top:78px;
+    height:calc(100svh - 78px);
+    width:100%;
+    z-index:-1;
+    margin-bottom:calc(-100svh + 78px);
+    overflow:hidden;
+    border-radius:0;
+}
+.bg-image{
+    inset:0;
+    background-image:linear-gradient(90deg,rgba(5,17,39,.62),rgba(5,17,39,.38)),url(assets/img/IMG-20261025-WA0021.jpg);
+    background-position:center;
+    background-size:cover;
+}
+.story-content{
+    width:min(1120px,100% - 48px);
+    margin-inline:auto;
+    padding:42px 0 70px;
+    display:grid;
+    gap:clamp(34px,6vw,76px);
+}
+.story-block1{
+    min-height:clamp(330px,43vw,490px);
+    height:auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:stretch;
+    gap:clamp(18px,4vw,52px);
+    padding:clamp(18px,3vw,34px);
+    border:1px solid rgba(230,199,131,.3);
+    border-radius:26px;
+    background:rgba(8,24,52,.76);
+    box-shadow:0 22px 55px rgba(0,0,0,.2);
+    backdrop-filter:blur(8px);
+}
+.story-block,.story-block2{
+    width:100%;height:auto;min-width:0;
+    display:flex;justify-content:center;align-items:center;
+}
+.story-block{padding:clamp(8px,2vw,24px);}
+.story-block2 img{
+    width:100%;height:clamp(230px,30vw,390px);
+    object-fit:cover;border-radius:18px;
+    box-shadow:0 16px 35px rgba(0,0,0,.28);
+}
+.story-block span{
+    font-size:.72rem;letter-spacing:.16em;line-height:1.5;
+    margin-bottom:16px;color:var(--gold-soft);font-weight:600;
+}
+.story-block h2{
+    font-size:clamp(1.8rem,3.7vw,3.25rem);
+    line-height:1.08;letter-spacing:-.03em;margin-bottom:18px;
+}
+.story-block p{
+    max-width:440px;font-size:clamp(.9rem,1.25vw,1rem);
+    line-height:1.8;color:#edf1f8;
+}
+.story-block.story-right{margin-left:0!important;}
+
+@media(max-width:860px){
+    .image-section{top:70px;height:calc(100svh - 70px);margin-bottom:calc(-100svh + 70px);}
+    .story-content{width:min(680px,100% - 32px);padding:28px 0 48px;gap:24px;}
+    .story-block1{min-height:0;grid-template-columns:1fr;gap:18px;padding:18px;border-radius:20px;}
+    .story-block{padding:10px 6px 4px;order:0;}
+    .story-block2{order:1;}
+    .story-block2 img{height:clamp(210px,55vw,330px);width:100%;}
+    .story-block h2{font-size:clamp(1.8rem,7vw,2.6rem);}
+    .story-block p{font-size:.92rem;line-height:1.7;}
+    .story-block span{font-size:.68rem;letter-spacing:.13em;margin-bottom:12px;}
+}
+@media(max-width:620px){
+    .slider{height:390px;border-radius:16px;}
+    .slide img{object-position:58% center;}
+    .slide::after{background:linear-gradient(0deg,rgba(8,24,52,.92) 0%,rgba(8,24,52,.55) 48%,rgba(8,24,52,.08) 100%);}
+    .slide-caption{left:22px;right:22px;bottom:56px;max-width:none;}
+    .slide-caption span{font-size:.62rem;letter-spacing:.14em;margin-bottom:10px;}
+    .slide-caption h3{font-size:2rem;max-width:330px;}
+    .slide-caption p{font-size:.82rem;max-width:290px;line-height:1.5;}
+    .left,.right{width:36px;height:36px;font-size:.82rem;top:42%;}
+    .left{left:10px}.right{right:10px}
+    .slider-dots{bottom:17px;}
+    .story-content{width:calc(100% - 28px);padding:22px 0 36px;gap:18px;}
+    .story-block1{padding:14px;gap:12px;border-radius:17px;}
+    .story-block{padding:8px 4px 2px;}
+    .story-block2 img{height:220px;border-radius:13px;}
+    .story-block h2{font-size:1.85rem;letter-spacing:-.02em;}
+    .story-block p{font-size:.86rem;line-height:1.65;}
+    .image-section{top:70px;height:calc(100svh - 70px);margin-bottom:calc(-100svh + 70px);}
+}
+@media(prefers-reduced-motion:reduce){.slide:has(img){animation:none}.slide img{transition:none}}
